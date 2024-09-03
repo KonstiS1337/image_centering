@@ -1,11 +1,10 @@
 #include "image_centering/image_centering.hpp"
 
-ImageCentering::ImageCentering() : Node("image_centering_node"),
-                                    pid_last_call_(builtin_interfaces::msg::Time())
+ImageCentering::ImageCentering() : Node("image_centering_node")
                                     {
     this->declare_parameter<std::string>("epuck_name","epuck");
     std::string name = this->get_parameter("epuck_name").as_string();
-    coords_sub_ = this->create_subscription<std_msgs::msg::Int16>(name + "/ball_coordinates/",1,std::bind(&ImageCentering::coordsSub,this,std::placeholders::_1));
+    coords_sub_ = this->create_subscription<std_msgs::msg::Int16>(name + "/ball_coordinates",1,std::bind(&ImageCentering::coordsSub,this,std::placeholders::_1));
     timer_ = this->create_wall_timer(std::chrono::milliseconds(100),std::bind(&ImageCentering::controlLoop,this));
     activate_srv_ = this->create_service<std_srvs::srv::SetBool>(name + "/image_centering/activation",std::bind(&ImageCentering::srvCB,this,std::placeholders::_1,std::placeholders::_2));
     robot_control_srv_ = this->create_client<epuck_driver_interfaces::srv::ChangeRobotState>(name + "/robot_control");
@@ -48,7 +47,7 @@ unsigned long ImageCentering::pidTimeFunction() {
     return (unsigned long) this->now().nanoseconds() / 1e+6;
 }
 
-void ImageCentering::coordsSub(const std_msgs::msg::Int16::ConstPtr & data) {
+void ImageCentering::coordsSub(const std::shared_ptr<std_msgs::msg::Int16> data) {
     current_x_ = data->data;
     return;
 }

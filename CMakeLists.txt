@@ -6,11 +6,11 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 # find dependencies
+find_package(rclcpp REQUIRED)
 find_package(ament_cmake REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(epuck_driver_interfaces REQUIRED)
 find_package(std_srvs REQUIRED)
-find_package(rclcpp REQUIRED)
 
 add_executable(${PROJECT_NAME}_node src/image_centering.cpp src/pid.cpp)
 target_include_directories(${PROJECT_NAME}_node PRIVATE include)
