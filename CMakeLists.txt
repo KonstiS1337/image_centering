@@ -8,12 +8,11 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(control_toolbox REQUIRED)
 find_package(epuck_driver_interfaces REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(rclcpp REQUIRED)
 
-add_executable(${PROJECT_NAME}_node src/image_centering.cpp)
+add_executable(${PROJECT_NAME}_node src/image_centering.cpp src/pid.cpp)
 target_include_directories(${PROJECT_NAME}_node PRIVATE include)
 
 # Installing node
@@ -35,7 +34,6 @@ DESTINATION lib/${PROJECT_NAME}
 ament_target_dependencies(${PROJECT_NAME}_node 
 rclcpp
 epuck_driver_interfaces 
-control_toolbox
 std_msgs
 std_srvs
 )
